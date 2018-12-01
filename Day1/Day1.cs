@@ -9,9 +9,10 @@ namespace AdventOfCode
 {
     class Program
     {
-        private static string[] lines = System.IO.File.ReadAllLines(@"C:\Users\Robert\Downloads\input.txt");
-        private static List<int> reachedFrequencies = new List<int>();
+        private static string[] lines = System.IO.File.ReadAllLines(@"C:\Users\Robert\Downloads\input(1).txt");
+        private static HashSet<int> reachedFrequenciesSet = new HashSet<int>();
         private static int part2Frequency = 0;
+        private static int timesReRead = 0;
 
         static void Main(string[] args)
         {
@@ -39,23 +40,24 @@ namespace AdventOfCode
         private static void part2()
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            reachedFrequencies.Add(0);
-            read(lines, reachedFrequencies, part2Frequency);
-            while (!read(lines, reachedFrequencies, reachedFrequencies[reachedFrequencies.Count - 1]))
+            reachedFrequenciesSet.Add(0);
+            read(lines, reachedFrequenciesSet, part2Frequency);
+            while (!read(lines, reachedFrequenciesSet, reachedFrequenciesSet.ElementAt(reachedFrequenciesSet.Count-1)))
             {
-
+                timesReRead++;
             }
             watch.Stop();
-            Console.Write("TIME TO FINISH = " + watch.ElapsedMilliseconds + "ms \r\n");
+            Console.Write("TIME TO FINISH = " + watch.ElapsedMilliseconds + "ms \r\n" );
+            Console.Write("Required passes: "+ timesReRead + "\r\n");
         }
-        private static bool read(string[] lines, List<int> reachedFrequencies,int frequency)
+        private static bool read(string[] lines, HashSet<int> reachedFrequencies,int frequency)
         {    
             bool isFound = false;
             foreach (string s in lines)
             {
                 int value = Int32.Parse(s);
                 frequency += value;
-                if (reachedFrequencies.Contains(frequency))
+                if (reachedFrequenciesSet.Contains(frequency))
                 {
                     Console.Write("THE FIRST DOUBLE IS: " + frequency + "\r\n");
                     isFound = true;
@@ -63,7 +65,7 @@ namespace AdventOfCode
                 }
                 else
                 {
-                    reachedFrequencies.Add(frequency);
+                    reachedFrequenciesSet.Add(frequency);
                 }
             }
             return isFound;
